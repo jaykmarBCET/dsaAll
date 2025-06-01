@@ -852,3 +852,583 @@ void X::display() {
 
 🚀 **Understanding Classes & Objects is key to mastering OOP in C++!**
 
+
+# Polymorphism in C++
+
+## Definition
+**Polymorphism** means "many forms". In C++, it refers to the ability of one function, operator, or object to behave differently in different contexts.
+
+---
+
+## Types of Polymorphism
+
+### 1. Compile-time Polymorphism (Static Binding)
+Achieved using:
+- Function Overloading
+- Operator Overloading
+
+#### ✅ Function Overloading
+Same function name with different parameter types.
+
+```cpp
+class Print {
+public:
+    void show(int i) {
+        std::cout << "Integer: " << i << std::endl;
+    }
+
+    void show(double d) {
+        std::cout << "Double: " << d << std::endl;
+    }
+};
+```
+
+#### ✅ Operator Overloading
+Allows redefining how operators work for user-defined types.
+
+```cpp
+class Complex {
+public:
+    int real, imag;
+    Complex(int r, int i) : real(r), imag(i) {}
+
+    Complex operator + (const Complex& obj) {
+        return Complex(real + obj.real, imag + obj.imag);
+    }
+};
+```
+
+---
+
+### 2. Run-time Polymorphism (Dynamic Binding)
+Achieved using:
+- Inheritance
+- Virtual functions
+
+#### ✅ Example:
+
+```cpp
+class Base {
+public:
+    virtual void display() {
+        std::cout << "Base class" << std::endl;
+    }
+};
+
+class Derived : public Base {
+public:
+    void display() override {
+        std::cout << "Derived class" << std::endl;
+    }
+};
+
+int main() {
+    Base* bptr;
+    Derived d;
+    bptr = &d;
+    bptr->display(); // Output: Derived class
+}
+```
+
+---
+
+## Virtual Functions
+- Declared using the `virtual` keyword.
+- Enables dynamic dispatch.
+- Should be declared in base class.
+- If not virtual, the base class function will always be called.
+
+---
+
+## Pure Virtual Function & Abstract Class
+- Declared using `= 0` syntax.
+- Makes class abstract, i.e., cannot be instantiated.
+
+```cpp
+class Shape {
+public:
+    virtual void draw() = 0; // Pure virtual function
+};
+
+class Circle : public Shape {
+public:
+    void draw() override {
+        std::cout << "Drawing Circle" << std::endl;
+    }
+};
+```
+
+---
+
+## Key Benefits
+- Code reusability
+- Flexibility and scalability
+- Simplifies code maintenance
+
+---
+
+## Real-world Analogy
+A single **"print"** function can print `int`, `float`, or `string`. The action is the same, but the behavior differs depending on the input type.
+
+---
+
+## Interview Points
+- C++ supports both static and dynamic polymorphism.
+- Virtual functions enable runtime polymorphism.
+- Abstract classes provide interfaces in C++.
+- Overloading vs Overriding: Overloading is compile-time; Overriding is runtime.
+
+---
+
+## Summary Table
+
+| Feature               | Compile-time Polymorphism | Run-time Polymorphism |
+|----------------------|---------------------------|------------------------|
+| Binding Time         | Compile Time              | Runtime                |
+| Techniques Used      | Overloading               | Overriding, Virtual    |
+| Flexibility          | Low                       | High                   |
+| Function Resolution  | Early Binding             | Late Binding           
+
+
+
+# Abstract Classes in C++
+
+## Definition
+An **abstract class** in C++ is a class that contains at least one **pure virtual function**. It cannot be instantiated directly and serves as a base class for other classes.
+
+---
+
+## Syntax
+
+```cpp
+class AbstractClass {
+public:
+    virtual void display() = 0; // Pure virtual function
+};
+```
+
+---
+
+## Key Features
+- Contains at least one pure virtual function (`= 0`)
+- Cannot create objects of abstract classes
+- Used to define **interfaces**
+- Derived classes must implement all pure virtual functions
+
+---
+
+## Example
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Shape {
+public:
+    virtual void draw() = 0; // Pure virtual function
+};
+
+class Circle : public Shape {
+public:
+    void draw() override {
+        cout << "Drawing Circle" << endl;
+    }
+};
+
+int main() {
+    // Shape s; // ❌ Error: Cannot instantiate abstract class
+    Circle c;
+    c.draw(); // ✅ Output: Drawing Circle
+}
+```
+
+---
+
+## Real-world Analogy
+Think of an **abstract class** as a **blueprint**. You cannot build the blueprint, but you can use it to create specific buildings (derived classes).
+
+---
+
+## Abstract Class vs Interface in C++
+| Feature                   | Abstract Class         | Interface (in C++)          |
+|--------------------------|------------------------|-----------------------------|
+| Methods                  | Can have implementation| Only pure virtual methods   |
+| Member Variables         | Allowed                | Typically disallowed        |
+| Use                      | Partial abstraction    | Full abstraction            |
+
+---
+
+## Pure Virtual Destructor
+
+```cpp
+class Base {
+public:
+    virtual ~Base() = 0; // Pure virtual destructor
+};
+
+Base::~Base() {
+    // Definition is still needed
+}
+```
+
+- Useful when your base class needs to be abstract but must also clean up properly.
+
+---
+
+## When to Use
+- When you want to enforce derived classes to implement specific behavior.
+- When you want to create a generic interface for a family of classes.
+
+---
+
+## Interview Notes
+- Abstract class can have constructors.
+- You must override all pure virtual functions to instantiate a derived class.
+- Helps in achieving runtime polymorphism.
+
+
+# Inheritance in C++
+
+## Definition
+**Inheritance** is a feature in C++ where a class (derived class) inherits properties and behaviors (members and methods) from another class (base class). It promotes **code reusability** and **polymorphism**.
+
+---
+
+## Syntax
+
+```cpp
+class Base {
+    // Base class members
+};
+
+class Derived : public Base {
+    // Derived class members
+};
+```
+
+---
+
+## Types of Inheritance in C++
+
+### 1. Single Inheritance
+One derived class inherits from one base class.
+
+```cpp
+class A {
+public:
+    void display() {
+        cout << "Class A" << endl;
+    }
+};
+
+class B : public A {
+    // Inherits display()
+};
+```
+
+### 2. Multiple Inheritance
+Derived class inherits from more than one base class.
+
+```cpp
+class A { /*...*/ };
+class B { /*...*/ };
+
+class C : public A, public B {
+    // Inherits from both A and B
+};
+```
+
+### 3. Multilevel Inheritance
+A derived class becomes the base class for another class.
+
+```cpp
+class A { /*...*/ };
+class B : public A { /*...*/ };
+class C : public B { /*...*/ };
+```
+
+### 4. Hierarchical Inheritance
+Multiple derived classes inherit from a single base class.
+
+```cpp
+class A { /*...*/ };
+class B : public A { /*...*/ };
+class C : public A { /*...*/ };
+```
+
+### 5. Hybrid Inheritance
+Combination of two or more types of inheritance.
+
+---
+
+## Access Specifiers
+
+| Specifier | Public Inheritance | Protected Inheritance | Private Inheritance |
+|-----------|--------------------|------------------------|---------------------|
+| public    | public             | protected              | private             |
+| protected | protected          | protected              | private             |
+| private   | inaccessible       | inaccessible           | inaccessible        |
+
+---
+
+## Example
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Animal {
+public:
+    void eat() {
+        cout << "Eating..." << endl;
+    }
+};
+
+class Dog : public Animal {
+public:
+    void bark() {
+        cout << "Barking..." << endl;
+    }
+};
+
+int main() {
+    Dog d;
+    d.eat();  // Inherited from Animal
+    d.bark(); // Defined in Dog
+}
+```
+
+---
+
+## Constructor Order
+- Base class constructor is called before derived class constructor.
+- Destructors are called in reverse order.
+
+---
+
+## Virtual Inheritance
+Used to avoid ambiguity in multiple inheritance (diamond problem).
+
+```cpp
+class A {
+public:
+    void show() {
+        cout << "A" << endl;
+    }
+};
+
+class B : virtual public A {};
+class C : virtual public A {};
+
+class D : public B, public C {};
+
+int main() {
+    D obj;
+    obj.show(); // No ambiguity
+}
+```
+
+---
+
+## Benefits
+- Code reusability
+- Logical hierarchy
+- Foundation for runtime polymorphism
+
+---
+
+## Interview Points
+- C++ supports multiple inheritance.
+- Always use virtual base classes to avoid ambiguity.
+- Constructors and destructors are not inherited.
+- Private members are not accessible in derived classes directly.
+
+
+# Operator Overloading in C++
+
+## Definition
+**Operator overloading** allows you to redefine the behavior of an operator for user-defined types (classes/structs).
+
+---
+
+## Syntax
+
+```cpp
+return_type operator symbol (parameters) {
+    // custom implementation
+}
+```
+
+---
+
+## Example: Overloading `+` for Complex Numbers
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Complex {
+public:
+    int real, imag;
+    Complex(int r = 0, int i = 0) : real(r), imag(i) {}
+
+    Complex operator + (const Complex& obj) {
+        return Complex(real + obj.real, imag + obj.imag);
+    }
+
+    void display() {
+        cout << real << " + " << imag << "i" << endl;
+    }
+};
+
+int main() {
+    Complex c1(3, 4), c2(1, 2);
+    Complex c3 = c1 + c2;
+    c3.display();  // Output: 4 + 6i
+}
+```
+
+---
+
+## Operators That Can Be Overloaded
+
+| Category     | Operators                                |
+|--------------|------------------------------------------|
+| Arithmetic   | +, -, *, /, %                            |
+| Relational   | ==, !=, <, >, <=, >=                     |
+| Assignment   | =, +=, -=, *=, /=                        |
+| Unary        | ++, --, !, ~                             |
+| I/O          | <<, >>                                   |
+| Subscript    | []                                       |
+| Function call| ()                                       |
+| Pointer      | ->, * (dereference), & (address-of)      |
+
+---
+
+## Restrictions
+- Cannot overload: `::`, `.`, `.*`, `sizeof`, `typeid`, `?:`
+- Overloaded operator must have at least one user-defined type as operand.
+
+---
+
+## Overloading Unary Operator
+
+```cpp
+class Count {
+public:
+    int value;
+    Count() : value(0) {}
+
+    void operator ++ () {
+        ++value;
+    }
+
+    void display() {
+        cout << "Value: " << value << endl;
+    }
+};
+```
+
+---
+
+## Overloading I/O Operators
+
+```cpp
+#include <iostream>
+using namespace std;
+
+class Point {
+public:
+    int x, y;
+    Point(int a, int b) : x(a), y(b) {}
+
+    friend ostream& operator << (ostream& out, const Point& p);
+};
+
+ostream& operator << (ostream& out, const Point& p) {
+    out << "(" << p.x << ", " << p.y << ")";
+    return out;
+}
+```
+
+---
+
+## Best Practices
+- Use `const` references for parameters and `const` for member functions when appropriate.
+- Maintain expected behavior of the operator for intuitive usage.
+
+---
+
+## Interview Tips
+- Operator overloading is a compile-time polymorphism.
+- Always overload `<<` and `>>` using friend functions.
+- Overloading should improve readability and usability of class.
+
+# Save the full Markdown content to a .md file
+
+markdown_content = """
+# Files and Streams
+
+## 📘 Introduction
+
+Files and streams are fundamental concepts in programming, especially for handling **input/output (I/O) operations**. They allow programs to read data from and write data to storage devices.
+
+---
+
+## 📂 Files
+
+### What is a File?
+A **file** is a collection of data or information that is stored on a storage device (e.g., hard disk, SSD) under a filename.
+
+### Types of Files
+- **Text Files**: Contains human-readable characters.
+  - Example: `.txt`, `.csv`, `.html`
+- **Binary Files**: Contains data in a format that is not human-readable.
+  - Example: `.exe`, `.jpg`, `.mp3`
+
+### File Operations
+1. **Opening a File**: Connecting a file to a stream.
+2. **Reading from a File**
+3. **Writing to a File**
+4. **Closing a File**
+
+---
+
+## 📥 Streams
+
+### What is a Stream?
+A **stream** is a sequence of data elements made available over time. It acts as a connection between a program and I/O devices like files, keyboard, or network.
+
+### Types of Streams
+- **Input Stream**: Used to read data.
+- **Output Stream**: Used to write data.
+
+---
+
+## 🖥️ File Handling in C (Example)
+
+```c
+#include <stdio.h>
+
+int main() {
+    FILE *fp;
+    char ch;
+
+    // Opening a file in read mode
+    fp = fopen("sample.txt", "r");
+
+    if (fp == NULL) {
+        printf("File cannot be opened.\\n");
+        return 1;
+    }
+
+    // Reading character by character
+    while ((ch = fgetc(fp)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(fp); // Closing the file
+    return 0;
+}
+```
+
