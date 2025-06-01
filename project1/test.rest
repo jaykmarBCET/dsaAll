@@ -1,0 +1,15 @@
+### create items
+POST http://localhost:8000/items
+Content-Type: application/json
+
+{
+    "name": "bluetooth",
+    "descriptions": "this is best bluetooth in india lots of people love this type bluetooth",
+    "price": 34.3,
+    "tax": 6.34
+}
+
+### Home
+
+GET http://localhost:8000
+Content-Type: application/json
